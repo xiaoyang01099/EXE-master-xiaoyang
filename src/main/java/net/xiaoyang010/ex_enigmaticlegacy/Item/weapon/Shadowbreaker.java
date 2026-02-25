@@ -36,7 +36,14 @@ public class Shadowbreaker extends SwordItem {
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, level, entity, slot, selected);
 
-        if (!selected || !(entity instanceof Player player)) {
+        if (!(entity instanceof Player player)) {
+            return;
+        }
+
+        boolean isInMainHand = player.getMainHandItem() == stack;
+        boolean isInOffHand = player.getOffhandItem() == stack;
+
+        if (!isInMainHand && !isInOffHand) {
             return;
         }
 

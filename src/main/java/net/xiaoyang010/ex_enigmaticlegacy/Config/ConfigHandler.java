@@ -70,7 +70,6 @@ public class ConfigHandler {
     public static ForgeConfigSpec.BooleanValue ONLY_REPAIR_EQUIPMENTS;
     public static ForgeConfigSpec.IntValue REPAIR_TICK;
 
-    public static ForgeConfigSpec.BooleanValue useManaChargerAnimation;
     public static ForgeConfigSpec.BooleanValue enableDragonArmorOverlayConfig;
 
     public static ForgeConfigSpec.DoubleValue starlitGuiScaleConfig;
@@ -98,10 +97,6 @@ public class ConfigHandler {
 
     static {
         CLIENT_BUILDER.comment("Client Settings").push("client");
-
-        useManaChargerAnimation = CLIENT_BUILDER
-                .comment("Activating the charging animation for the Mana Charger")
-                .define("manaChargerLighting", true);
 
         enableDragonArmorOverlayConfig = CLIENT_BUILDER
                 .comment("Enable/disable the Dragon Crystal Armor helmet overlay effect")

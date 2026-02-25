@@ -129,11 +129,6 @@ public class TileCursedGourmaryllis extends TileCursedGeneratingFlower {
     }
 
     @Override
-    public @Nullable BlockPos findClosestTarget() {
-        return super.findClosestTarget();
-    }
-
-    @Override
     public void writeToPacketNBT(CompoundTag cmp) {
         super.writeToPacketNBT(cmp);
         cmp.putInt(TAG_COOLDOWN_TICKS, cooldownTicks);

@@ -29,6 +29,7 @@ public final class RainbowAvaritiaShaders {
     public static boolean inventoryRender = false;
     public static int renderTime;
     public static float renderFrame;
+
     public static CCShaderInstance cosmicShader;
     public static CCUniform cosmicTime;
     public static CCUniform cosmicYaw;
@@ -38,6 +39,15 @@ public final class RainbowAvaritiaShaders {
     public static CCUniform cosmicUVs;
     public static CCUniform FogColor;
     public static RenderType RAINBOW_COSMIC_RENDER_TYPE;
+
+    public static CCShaderInstance particleCosmicShader;
+    public static CCUniform particleCosmicTime;
+    public static CCUniform particleCosmicYaw;
+    public static CCUniform particleCosmicPitch;
+    public static CCUniform particleCosmicExternalScale;
+    public static CCUniform particleCosmicOpacity;
+    public static CCUniform particleCosmicUVs;
+    public static CCUniform particleFogColor;
 
     static {
         RAINBOW_COSMIC_RENDER_TYPE = RenderType.create(
@@ -66,7 +76,7 @@ public final class RainbowAvaritiaShaders {
                             DefaultVertexFormat.BLOCK
                     ),
                     e -> {
-                        cosmicShader = (CCShaderInstance)e;
+                        cosmicShader = (CCShaderInstance) e;
                         cosmicTime = Objects.requireNonNull(cosmicShader.getUniform("time"));
                         cosmicYaw = Objects.requireNonNull(cosmicShader.getUniform("yaw"));
                         cosmicPitch = Objects.requireNonNull(cosmicShader.getUniform("pitch"));
@@ -75,10 +85,10 @@ public final class RainbowAvaritiaShaders {
                         cosmicUVs = Objects.requireNonNull(cosmicShader.getUniform("cosmicuvs"));
                         FogColor = cosmicShader.getUniform("FogColor");
 
-                        cosmicTime.set((float)renderTime + renderFrame);
+                        cosmicTime.set((float) renderTime + renderFrame);
 
                         cosmicShader.onApply(() -> {
-                            cosmicTime.set((float)renderTime + renderFrame);
+                            cosmicTime.set((float) renderTime + renderFrame);
 
                             if (FogColor != null) {
                                 float hue = ((float) Util.getMillis() / 5000.0F) % 1.0F;
@@ -91,12 +101,60 @@ public final class RainbowAvaritiaShaders {
                                 FogColor.set(r, g, b, 1.0F);
                             }
                         });
-
-                        ExEnigmaticlegacyMod.LOGGER.info("Rainbow Cosmic Shader loaded successfully!");
                     }
             );
-        } catch (Exception exception) {
-            ExEnigmaticlegacyMod.LOGGER.error("Failed to load rainbow cosmic shader", exception);
+
+            event.registerShader(
+                    CCShaderInstance.create(
+                            event.getResourceManager(),
+                            new ResourceLocation(ExEnigmaticlegacyMod.MODID, "rainbow_cosmic_particle"),
+                            DefaultVertexFormat.PARTICLE
+                    ),
+                    e -> {
+                        particleCosmicShader = (CCShaderInstance) e;
+                        particleCosmicTime = Objects.requireNonNull(particleCosmicShader.getUniform("time"));
+                        particleCosmicYaw = Objects.requireNonNull(particleCosmicShader.getUniform("yaw"));
+                        particleCosmicPitch = Objects.requireNonNull(particleCosmicShader.getUniform("pitch"));
+                        particleCosmicExternalScale = Objects.requireNonNull(particleCosmicShader.getUniform("externalScale"));
+                        particleCosmicOpacity = Objects.requireNonNull(particleCosmicShader.getUniform("opacity"));
+                        particleCosmicUVs = Objects.requireNonNull(particleCosmicShader.getUniform("cosmicuvs"));
+                        particleFogColor = particleCosmicShader.getUniform("FogColor");
+
+                        particleCosmicTime.set((float) renderTime + renderFrame);
+
+                        particleCosmicShader.onApply(() -> {
+                            particleCosmicTime.set((float) renderTime + renderFrame);
+
+                            Minecraft mc = Minecraft.getInstance();
+                            if (mc.player != null) {
+                                float yaw = (float) Math.toRadians(mc.player.getYRot());
+                                float pitch = (float) Math.toRadians(mc.player.getXRot());
+                                particleCosmicYaw.set(yaw);
+                                particleCosmicPitch.set(pitch);
+                            }
+
+                            particleCosmicExternalScale.set(1.0F);
+                            particleCosmicOpacity.set(1.0F);
+
+                            if (particleCosmicUVs != null) {
+                                particleCosmicUVs.set(COSMIC_UVS);
+                            }
+
+                            if (particleFogColor != null) {
+                                float hue = ((float) Util.getMillis() / 5000.0F) % 1.0F;
+                                int rgb = Mth.hsvToRgb(hue * 6.0F, 1.0F, 1.0F);
+
+                                float r = ((rgb >> 16) & 0xFF) / 255.0F;
+                                float g = ((rgb >> 8) & 0xFF) / 255.0F;
+                                float b = (rgb & 0xFF) / 255.0F;
+
+                                particleFogColor.set(r, g, b, 1.0F);
+                            }
+                        });
+                    }
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
