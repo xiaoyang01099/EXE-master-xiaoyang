@@ -2,30 +2,36 @@ package net.xiaoyang010.ex_enigmaticlegacy.Compat.Avaritia.shader;
 
 import codechicken.lib.render.shader.CCShaderInstance;
 import codechicken.lib.render.shader.CCUniform;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Avaritia.AccessUtils;
 import net.xiaoyang010.ex_enigmaticlegacy.ExEnigmaticlegacyMod;
+import org.lwjgl.opengl.GL13;
 
 import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = ExEnigmaticlegacyMod.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = ExEnigmaticlegacyMod.MODID, value = Dist.CLIENT)
 public final class RainbowAvaritiaShaders {
     public static final float[] COSMIC_UVS = new float[40];
+    public static final float[] PARTICLE_COSMIC_UVS = new float[40];
     public static boolean inventoryRender = false;
     public static int renderTime;
     public static float renderFrame;
@@ -49,7 +55,15 @@ public final class RainbowAvaritiaShaders {
     public static CCUniform particleCosmicUVs;
     public static CCUniform particleFogColor;
 
+    private static final ResourceLocation[] COSMIC_LOCATIONS = new ResourceLocation[10];
+    private static boolean cosmicUVsInitialized = false;
+    private static boolean particleCosmicUVsInitialized = false;
+
     static {
+        for (int i = 0; i < 10; i++) {
+            COSMIC_LOCATIONS[i] = new ResourceLocation(ExEnigmaticlegacyMod.MODID, "shader/cosmic_" + i);
+        }
+
         RAINBOW_COSMIC_RENDER_TYPE = RenderType.create(
                 "ex_enigmaticlegacy:rainbow_cosmic",
                 DefaultVertexFormat.BLOCK,
@@ -67,6 +81,66 @@ public final class RainbowAvaritiaShaders {
         );
     }
 
+    @SubscribeEvent
+    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
+        ResourceLocation atlasLocation = event.getAtlas().location();
+
+        if (atlasLocation.equals(TextureAtlas.LOCATION_BLOCKS) ||
+                atlasLocation.equals(TextureAtlas.LOCATION_PARTICLES)) {
+            for (ResourceLocation location : COSMIC_LOCATIONS) {
+                event.addSprite(location);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onTextureStitchPost(TextureStitchEvent.Post event) {
+        ResourceLocation atlasLocation = event.getAtlas().location();
+
+        if (atlasLocation.equals(TextureAtlas.LOCATION_BLOCKS)) {
+            initCosmicUVs(event.getAtlas());
+        }
+
+        if (atlasLocation.equals(TextureAtlas.LOCATION_PARTICLES)) {
+            initParticleCosmicUVs(event.getAtlas());
+        }
+    }
+
+    private static void initCosmicUVs(TextureAtlas atlas) {
+        for (int i = 0; i < 10; i++) {
+            TextureAtlasSprite sprite = atlas.getSprite(COSMIC_LOCATIONS[i]);
+
+            COSMIC_UVS[i * 4] = sprite.getU0();
+            COSMIC_UVS[i * 4 + 1] = sprite.getV0();
+            COSMIC_UVS[i * 4 + 2] = sprite.getU1();
+            COSMIC_UVS[i * 4 + 3] = sprite.getV1();
+        }
+
+        cosmicUVsInitialized = true;
+
+        if (cosmicUVs != null) {
+            cosmicUVs.set(COSMIC_UVS);
+        }
+    }
+
+    private static void initParticleCosmicUVs(TextureAtlas atlas) {
+        for (int i = 0; i < 10; i++) {
+            TextureAtlasSprite sprite = atlas.getSprite(COSMIC_LOCATIONS[i]);
+
+            PARTICLE_COSMIC_UVS[i * 4] = sprite.getU0();
+            PARTICLE_COSMIC_UVS[i * 4 + 1] = sprite.getV0();
+            PARTICLE_COSMIC_UVS[i * 4 + 2] = sprite.getU1();
+            PARTICLE_COSMIC_UVS[i * 4 + 3] = sprite.getV1();
+        }
+
+        particleCosmicUVsInitialized = true;
+
+        if (particleCosmicUVs != null) {
+            particleCosmicUVs.set(PARTICLE_COSMIC_UVS);
+        }
+    }
+
+    @SubscribeEvent
     public static void onRegisterShaders(RegisterShadersEvent event) {
         try {
             event.registerShader(
@@ -84,6 +158,10 @@ public final class RainbowAvaritiaShaders {
                         cosmicOpacity = Objects.requireNonNull(cosmicShader.getUniform("opacity"));
                         cosmicUVs = Objects.requireNonNull(cosmicShader.getUniform("cosmicuvs"));
                         FogColor = cosmicShader.getUniform("FogColor");
+
+                        if (cosmicUVsInitialized) {
+                            cosmicUVs.set(COSMIC_UVS);
+                        }
 
                         cosmicTime.set((float) renderTime + renderFrame);
 
@@ -120,6 +198,10 @@ public final class RainbowAvaritiaShaders {
                         particleCosmicUVs = Objects.requireNonNull(particleCosmicShader.getUniform("cosmicuvs"));
                         particleFogColor = particleCosmicShader.getUniform("FogColor");
 
+                        if (particleCosmicUVsInitialized) {
+                            particleCosmicUVs.set(PARTICLE_COSMIC_UVS);
+                        }
+
                         particleCosmicTime.set((float) renderTime + renderFrame);
 
                         particleCosmicShader.onApply(() -> {
@@ -136,8 +218,8 @@ public final class RainbowAvaritiaShaders {
                             particleCosmicExternalScale.set(1.0F);
                             particleCosmicOpacity.set(1.0F);
 
-                            if (particleCosmicUVs != null) {
-                                particleCosmicUVs.set(COSMIC_UVS);
+                            if (particleCosmicUVsInitialized) {
+                                particleCosmicUVs.set(PARTICLE_COSMIC_UVS);
                             }
 
                             if (particleFogColor != null) {

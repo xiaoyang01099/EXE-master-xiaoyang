@@ -15,6 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Avaritia.shader.RainbowAvaritiaShaders;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL13;
 
 @OnlyIn(Dist.CLIENT)
 public class AsgardandelionParticle extends TextureSheetParticle {
@@ -106,9 +107,7 @@ public class AsgardandelionParticle extends TextureSheetParticle {
 //
 //    @Override
 //    public void render(@NotNull VertexConsumer buffer, Camera camera, float partialTicks) {
-//        if (RainbowAvaritiaShaders.cosmicShader != null) {
-//            super.render(buffer, camera, partialTicks);
-//        }
+//        super.render(buffer, camera, partialTicks);
 //    }
 //
 //    @Override
