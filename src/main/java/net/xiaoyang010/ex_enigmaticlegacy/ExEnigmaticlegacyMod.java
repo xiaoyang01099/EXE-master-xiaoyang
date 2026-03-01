@@ -5,6 +5,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -35,6 +37,7 @@ import net.xiaoyang010.ex_enigmaticlegacy.Event.CrissaegrimEventHandler;
 import net.xiaoyang010.ex_enigmaticlegacy.Client.particle.ef.EffectManager;
 import net.xiaoyang010.ex_enigmaticlegacy.Client.particle.fx.FXHandler;
 import net.xiaoyang010.ex_enigmaticlegacy.Tile.StarlitSanctumTile;
+import net.xiaoyang010.ex_enigmaticlegacy.Client.BloodBarHud;
 import net.xiaoyang010.ex_enigmaticlegacy.api.test.CurseAbilityHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -130,6 +133,11 @@ public class ExEnigmaticlegacyMod {
 					StarlitSanctumTile.MULTIBLOCK.get()
 			);
 		});
+		OverlayRegistry.registerOverlayAbove(
+				ForgeIngameGui.FOOD_LEVEL_ELEMENT,
+				"blood_bar",
+				BloodBarHud.INSTANCE
+		);
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {

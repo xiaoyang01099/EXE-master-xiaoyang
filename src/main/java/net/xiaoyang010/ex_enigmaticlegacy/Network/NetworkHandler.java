@@ -18,6 +18,7 @@ import net.xiaoyang010.ex_enigmaticlegacy.Network.inputPacket.PortalTraceMessage
 import net.xiaoyang010.ex_enigmaticlegacy.Network.inputMessage.TelekinesisTomeLevelParticleMessage;
 import net.xiaoyang010.ex_enigmaticlegacy.Network.inputMessage.TelekinesisTomeLevelAttackMessage;
 import net.xiaoyang010.ex_enigmaticlegacy.Network.inputPacket.HornChargeHudPacket;
+import net.xiaoyang010.ex_enigmaticlegacy.api.test.CorruptionSyncPacket;
 
 import java.util.Optional;
 
@@ -33,6 +34,15 @@ public class NetworkHandler {
     private static int packetId = 0;
 
     public static void register() {
+        CHANNEL.registerMessage(
+                packetId++,
+                CorruptionSyncPacket.class,
+                CorruptionSyncPacket::encode,
+                CorruptionSyncPacket::decode,
+                CorruptionSyncPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
+        );
+
         CHANNEL.registerMessage(
                 packetId++,
                 RecipeTransferPacket.class,
@@ -517,5 +527,30 @@ public class NetworkHandler {
 
     public static void sendToPlayer(Object message, ServerPlayer player) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), message);
+    }
+
+    public static void sendCorruptionUpdate(ServerPlayer player, net.minecraft.core.BlockPos pos, int corruption) {
+        CHANNEL.send(
+                PacketDistributor.PLAYER.with(() -> player),
+                new CorruptionSyncPacket(pos, corruption)
+        );
+    }
+
+    public static void broadcastCorruptionUpdate(net.minecraft.server.level.ServerLevel level,
+                                                 net.minecraft.core.BlockPos pos, int corruption) {
+        CHANNEL.send(
+                PacketDistributor.TRACKING_CHUNK.with(
+                        () -> level.getChunkAt(pos)
+                ),
+                new CorruptionSyncPacket(pos, corruption)
+        );
+    }
+
+    public static void sendAllCorruptionData(ServerPlayer player,
+                                             java.util.Map<net.minecraft.core.BlockPos, Integer> data) {
+        CHANNEL.send(
+                PacketDistributor.PLAYER.with(() -> player),
+                new CorruptionSyncPacket(data)
+        );
     }
 }

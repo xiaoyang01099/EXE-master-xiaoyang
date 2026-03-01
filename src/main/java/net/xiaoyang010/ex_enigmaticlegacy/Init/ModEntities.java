@@ -19,6 +19,8 @@ import net.xiaoyang010.ex_enigmaticlegacy.Entity.biological.*;
 import net.xiaoyang010.ex_enigmaticlegacy.Entity.others.*;
 import net.xiaoyang010.ex_enigmaticlegacy.ExEnigmaticlegacyMod;
 import net.xiaoyang010.ex_enigmaticlegacy.Client.particle.ef.EntitySlash;
+import net.xiaoyang010.ex_enigmaticlegacy.api.test.VampireBat;
+import net.xiaoyang010.ex_enigmaticlegacy.api.test.VampireWolf;
 import net.xiaoyang010.ex_enigmaticlegacy.api.test.res.EntityCursedManaBurst;
 
 
@@ -44,6 +46,22 @@ public class ModEntities {
 //							.fireImmune()
 //							.build("doppleganger_vi")
 //			);
+
+	public static final RegistryObject<EntityType<VampireWolf>> VAMPIRE_WOLF =
+			REGISTRY.register("vampire_wolf", () ->
+					EntityType.Builder.<VampireWolf>of(VampireWolf::new, MobCategory.CREATURE)
+							.sized(0.6F, 0.85F)
+							.clientTrackingRange(10)
+							.build("vampire_wolf")
+			);
+
+	public static final RegistryObject<EntityType<VampireBat>> VAMPIRE_BAT =
+			REGISTRY.register("vampire_bat", () ->
+					EntityType.Builder.<VampireBat>of(VampireBat::new, MobCategory.AMBIENT)
+							.sized(0.5F, 0.9F)
+							.clientTrackingRange(5)
+							.build("vampire_bat")
+			);
 
 	public static final RegistryObject<EntityType<EntityCursedManaBurst>> CURSED_MANA_BURST =
 			REGISTRY.register("cursed_mana_burst",

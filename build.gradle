@@ -179,6 +179,7 @@ dependencies {
 
     //联动mod
     //geckolib
+    compileOnly fg.deobf("curse.maven:geckolib-388172:4181370")
     runtimeOnly fg.deobf("curse.maven:geckolib-388172:4181370")
 
     //属性修复

@@ -73,7 +73,7 @@ public class TileCursedManaSpreader extends BlockEntity implements ICursedManaSp
     private int cursedMana = 0;
     public float rotationX = 0F;
     public float rotationY = 0F;
-    private boolean canShoot;
+    private boolean canShoot = true;
     private int burstParticleTick = 0;
     private int lastBurstDeathTick = -1;
     private ICursedManaReceiver receiver = null;
@@ -147,9 +147,6 @@ public class TileCursedManaSpreader extends BlockEntity implements ICursedManaSp
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TileCursedManaSpreader spreader) {
         boolean inNetwork = CursedManaNetwork.getInstance().isCollectorIn(level, spreader);
-        if (spreader.cursedMana > 0 && level.getGameTime() % 20 == 0 && inNetwork) {
-            spreader.corruptNearbyPools();
-        }
         if (!inNetwork && !spreader.isRemoved()) {
             CursedManaNetwork.getInstance().fireCursedManaNetworkEvent(
                     spreader, CursedManaBlockType.COLLECTOR, CursedManaNetworkAction.ADD
@@ -158,24 +155,18 @@ public class TileCursedManaSpreader extends BlockEntity implements ICursedManaSp
         if (inNetwork) {
             for (Direction dir : Direction.values()) {
                 BlockPos relPos = pos.relative(dir);
-                if (level.hasChunkAt(relPos)) {
-                    BlockEntity be = level.getBlockEntity(relPos);
-
-                    if (be instanceof ICursedManaPool pool) {
-                        if (pool != spreader.receiver) {
-                            if (pool instanceof IKeyLocked locked &&
-                                    !locked.getOutputKey().equals(spreader.getInputKey())) {
-                                continue;
-                            }
-                            int manaInPool = pool.getCurrentCursedMana();
-                            if (manaInPool > 0 && !spreader.isCursedManaFull()) {
-                                int manaMissing = spreader.getMaxCursedMana() - spreader.cursedMana;
-                                int manaToRemove = Math.min(manaInPool, manaMissing);
-                                pool.receiveCursedMana(-manaToRemove);
-                                spreader.receiveCursedMana(manaToRemove);
-                            }
-                        }
-                    }
+                if (!level.hasChunkAt(relPos)) continue;
+                BlockEntity be = level.getBlockEntity(relPos);
+                if (!(be instanceof ICursedManaPool pool)) continue;
+                if (pool == spreader.receiver) continue;
+                if (pool instanceof IKeyLocked locked &&
+                        !locked.getOutputKey().equals(spreader.getInputKey())) continue;
+                int manaInPool = pool.getCurrentCursedMana();
+                if (manaInPool > 0 && !spreader.isCursedManaFull()) {
+                    int manaMissing = spreader.getMaxCursedMana() - spreader.cursedMana;
+                    int manaToRemove = Math.min(manaInPool, manaMissing);
+                    pool.receiveCursedMana(-manaToRemove);
+                    spreader.receiveCursedMana(manaToRemove);
                 }
             }
         }
@@ -211,12 +202,8 @@ public class TileCursedManaSpreader extends BlockEntity implements ICursedManaSp
         int burstMana = variant.burstMana;
         boolean shouldShoot = spreader.canShoot && spreader.cursedMana >= burstMana;
         if (shouldShoot && spreader.receiver != null) {
-            if (spreader.receiver.isCursedManaFull()) {
-                shouldShoot = false;
-            }
-            if (shouldShoot && !spreader.receiver.canReceiveCursedManaFromBursts()) {
-                shouldShoot = false;
-            }
+            if (spreader.receiver.isCursedManaFull()) shouldShoot = false;
+            if (shouldShoot && !spreader.receiver.canReceiveCursedManaFromBursts()) shouldShoot = false;
         }
         if (shouldShoot) {
             spreader.tryShootBurst(variant);

@@ -10,8 +10,10 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -81,11 +83,13 @@ import net.xiaoyang010.ex_enigmaticlegacy.Network.inputMessage.StepHeightMessage
 import net.xiaoyang010.ex_enigmaticlegacy.Network.inputPacket.JumpPacket;
 import net.xiaoyang010.ex_enigmaticlegacy.Util.ColorText;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.Relic.over.ContainerOverpowered;
+import net.xiaoyang010.ex_enigmaticlegacy.api.test.api.PoolCorruptionManager;
 import vazkii.botania.api.mana.ManaItemHandler;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.decor.BlockTinyPotato;
 import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.helper.PlayerHelper;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -102,6 +106,41 @@ public class ModEventHandler {
     private static int invulnerableTimer = 0;
     private static final int INVULNERABLE_DURATION = 30;
     private static final int REPAIR_COST = 1500;
+
+    @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
+
+        CompoundTag persistentData = serverPlayer.getPersistentData();
+
+        CompoundTag forgeData = persistentData.getCompound(Player.PERSISTED_NBT_TAG);
+
+        String key = ExEnigmaticlegacyMod.MODID + ":bible_book_given";
+
+        if (!forgeData.getBoolean(key)) {
+            ItemStack book = PatchouliAPI.get().getBookStack(
+                    new ResourceLocation(ExEnigmaticlegacyMod.MODID, "bible")
+            );
+            serverPlayer.getInventory().add(book);
+
+            forgeData.putBoolean(key, true);
+            persistentData.put(Player.PERSISTED_NBT_TAG, forgeData);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
+            PoolCorruptionManager.syncToPlayer(serverPlayer.getLevel(), serverPlayer);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
+            PoolCorruptionManager.syncToPlayer(serverPlayer.getLevel(), serverPlayer);
+        }
+    }
 
     @SubscribeEvent
     public static void onEntityKilled(LivingDeathEvent event) {
