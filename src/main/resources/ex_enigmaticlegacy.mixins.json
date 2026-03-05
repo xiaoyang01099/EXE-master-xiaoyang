@@ -29,6 +29,7 @@
     "WitherBossMixin"
   ],
   "client": [
+    "MixinGuiSelectedItemName",
     "PlayerRendererMixin",
     "TimeStop$ClientMixin",
     "TimeStop$GameRendererMixin"

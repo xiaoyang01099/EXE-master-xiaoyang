@@ -112,7 +112,7 @@ public class ModBlockss {
 
 
 	//其他
-//	public static final RegistryObject<Block> MAGIC_TABLE = REGISTRY.register("magic_table", () -> new MagicTableBlock(Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> MAGIC_TABLE = REGISTRY.register("magic_table", () -> new MagicTableBlock(Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD).noOcclusion()));
 	public static final RegistryObject<Block> SPECTRITE_CHEST = REGISTRY.register("spectrite_chest", SpectriteChest::new);
 	public static final RegistryObject<Block> INFINITYGlASS = REGISTRY.register("infinityglass", InfinityGlass::new);
 	public static final RegistryObject<Block> STARLIT_SANCTUM = REGISTRY.register("starlit_sanctum", StarlitSanctum::new);

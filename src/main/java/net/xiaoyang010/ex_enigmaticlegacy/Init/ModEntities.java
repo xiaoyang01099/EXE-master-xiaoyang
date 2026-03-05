@@ -47,6 +47,16 @@ public class ModEntities {
 //							.build("doppleganger_vi")
 //			);
 
+	public static final RegistryObject<EntityType<EntitySlimeCannonBall>> SLIME_CANNON_BALL =
+			REGISTRY.register("slime_cannon_ball", () ->
+					EntityType.Builder.<EntitySlimeCannonBall>of(
+									EntitySlimeCannonBall::new, MobCategory.MISC)
+							.sized(0.51F, 0.51F)
+							.clientTrackingRange(64)
+							.updateInterval(1)
+							.build(new ResourceLocation(ExEnigmaticlegacyMod.MODID, "slime_cannon_ball").toString())
+			);
+
 	public static final RegistryObject<EntityType<VampireWolf>> VAMPIRE_WOLF =
 			REGISTRY.register("vampire_wolf", () ->
 					EntityType.Builder.<VampireWolf>of(VampireWolf::new, MobCategory.CREATURE)

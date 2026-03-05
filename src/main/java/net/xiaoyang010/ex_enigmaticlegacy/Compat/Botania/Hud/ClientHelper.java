@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.xiaoyang010.ex_enigmaticlegacy.ExEnigmaticlegacyMod;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Model.Vector3;
 import vazkii.botania.client.core.helper.RenderHelper;
@@ -29,7 +30,7 @@ import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientHelper {
-    public static final ResourceLocation miscHuds = new ResourceLocation("textures/misc/engineer_hopper_hud.png");
+    public static final ResourceLocation miscHuds = new ResourceLocation(ExEnigmaticlegacyMod.MODID, "textures/misc/engineer_hopper_hud.png");
     private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("textures/environment/end_sky.png");
     private static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("textures/entity/end_portal.png");
     private static final Random RANDOM = new Random(31100L);

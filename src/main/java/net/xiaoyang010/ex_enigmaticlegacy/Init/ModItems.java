@@ -19,6 +19,7 @@ import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.ItemHybridSpecialFlower
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.Relic.SuperpositionRing;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.Relic.BlackHoleGrimoire;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.HolyRing;
+import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.SlimeCannon;
 import net.xiaoyang010.ex_enigmaticlegacy.ExEnigmaticlegacyMod;
 import net.xiaoyang010.ex_enigmaticlegacy.Item.*;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.HornPlenty;
@@ -238,12 +239,20 @@ public class ModItems {
 	public static final RegistryObject<Item> MYSTICISM_INGOT = REGISTRY.register("mysticism_ingot", () -> new ModIngot(INGOT_PROPERTIES.rarity(ModRarities.MIRACLE)));
 	public static final RegistryObject<Item> RAINBOW_NUGGET = REGISTRY.register("rainbow_nugget", () -> new ModIngot(INGOT_PROPERTIES.rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> RAINBOW_ORE_ROCK = REGISTRY.register("rainbow_ore_rock", () -> new ModIngot(INGOT_PROPERTIES.rarity(Rarity.EPIC)));
+	public static final RegistryObject<Item> CREEPER_NUGGET = REGISTRY.register("creeper_nugget", () -> CreeperNugget.INSTANCE);
+
+
+
 
 	//其他通用物品注册
 	public static final RegistryObject<Item> NATURE_GIFT = REGISTRY.register("nature_gift", () -> new ItemResource(false));
 	public static final RegistryObject<Item> FORGOTTEN_LANDS = REGISTRY.register("air_of_forgotten_lands", () -> new ItemResource(true));
 	public static final RegistryObject<Item> CURSED_PASTELS = REGISTRY.register("cursed_pastels", () -> new ItemResource(false));
 	public static final RegistryObject<Item> MANA_PASTELS = REGISTRY.register("mana_pastels", () -> new ItemResource(false));
+
+
+
+
 
 	//其他物品注册
 	public static final RegistryObject<Item> SPECTRITE_CRYSTAL = REGISTRY.register("spectrite_crystal", SpectriteCrystal::new);
@@ -272,6 +281,7 @@ public class ModItems {
 	public static final RegistryObject<Item> IVY_REGEN = REGISTRY.register("ivy_regen", () -> new IvyRegen(new Properties().tab(ModTabs.TAB_EXENIGMATICLEGACY_BOTANIA)));
 	public static final RegistryObject<Item> MANA_FLOWER = REGISTRY.register("mana_flower", ManaFlower::new);
 	public static final RegistryObject<Item> INFINITY_ROD = REGISTRY.register("infinity_rod", InfinityRod::new);
+	public static final RegistryObject<Item> SLIME_CANNON = REGISTRY.register("slime_cannon", SlimeCannon::new);
 	public static final RegistryObject<Item> CONTINUUM_BOMB = REGISTRY.register("continuum_bomb", () -> new ContinuumBombItem(new Properties().rarity(Rarity.EPIC).tab(ModTabs.TAB_EXENIGMATICLEGACY_ITEM)));
 
 	//奇点
@@ -428,6 +438,7 @@ public class ModItems {
 	public static final RegistryObject<Item> FATE_HORN = REGISTRY.register("fate_horn",
 			() -> new FateHorn(new Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()
 					.tab(ModTabs.TAB_EXENIGMATICLEGACY_BOTANIA)));
+
 	//遗物
 	public static final RegistryObject<Item> SCEPTER_OF_SOVEREIGN = REGISTRY.register("scepter_of_sovereign",
 			() -> new ScepterOfSovereign(new Properties().tab(ModTabs.TAB_EXENIGMATICLEGACY_BOTANIA).stacksTo(1).fireResistant()));

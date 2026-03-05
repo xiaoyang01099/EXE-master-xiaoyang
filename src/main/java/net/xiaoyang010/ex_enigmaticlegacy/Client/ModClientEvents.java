@@ -99,6 +99,8 @@ public class ModClientEvents {
         );
         event.registerLayerDefinition(ModModelLayers.VINE_AND_PIECE, PieceModel::createBodyLayer
         );
+        event.registerLayerDefinition(ModModelLayers.SLIME_CANNON, ModelSlimeCannon::createBodyLayer
+        );
 
     }
 
