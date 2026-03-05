@@ -56,7 +56,7 @@ public class SlimeCannon extends Item implements IWaveName {
 
     @Override
     public WaveStyle getWaveStyle(ItemStack stack) {
-        return WaveStyle.RAINBOW;
+        return WaveStyle.HOLY;
     }
 
     @Override
