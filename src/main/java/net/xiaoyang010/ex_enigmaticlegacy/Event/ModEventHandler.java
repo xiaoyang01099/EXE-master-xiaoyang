@@ -356,7 +356,7 @@ public class ModEventHandler {
                 }
             }
             if (air && b){
-                world.setBlock(pos.below(), ModBlockss.ANTIGRAVITATION_BLOCK.get().defaultBlockState(), 2);  //设置空方块
+                world.setBlock(pos.below(), ModBlockss.ANTIGRAVITATION_BLOCK.get().defaultBlockState(), 2);
             }
         }
     }
@@ -367,7 +367,7 @@ public class ModEventHandler {
         BlockPos pos = event.getPos();
         Player player = event.getPlayer();
         LevelAccessor world = event.getWorld();
-        BlockState blockState = world.getBlockState(pos.above()); //上方方块
+        BlockState blockState = world.getBlockState(pos.above());
         if (blockState.getBlock() instanceof FallingBlock fallingBlock) {
             boolean b = false;
             for (ItemStack item : player.getInventory().items) {

@@ -113,6 +113,13 @@ public class ModItems {
 
 	//扩展浮空花
 
+
+
+
+
+
+
+
 	//其他方块物品
 	public static final RegistryObject<Item> ADVANCED_SPREADER = block(ModBlockss.ADVANCED_SPREADER, ModTabs.TAB_EXENIGMATICLEGACY_BOTANIA);
 	public static final RegistryObject<Item> MANA_CRYSTAL = block(ModBlockss.MANA_CRYSTAL, ModTabs.TAB_EXENIGMATICLEGACY_BOTANIA);
@@ -158,6 +165,7 @@ public class ModItems {
 	public static final RegistryObject<Item> LEBETHRON_CORE = block(ModBlockss.LEBETHRON_CORE, ModTabs.TAB_EXENIGMATICLEGACY_BOTANIA);
 	public static final RegistryObject<Item> LEBETHRON_LOG = block(ModBlockss.LEBETHRON_LOG, ModTabs.TAB_EXENIGMATICLEGACY_BOTANIA);
 	public static final RegistryObject<Item> STARLIT_SANCTUM = block(ModBlockss.STARLIT_SANCTUM, ModTabs.TAB_EXENIGMATICLEGACY_ITEM);
+	public static final RegistryObject<Item> PEACEFUL_TABLE = block(ModBlockss.PEACEFUL_TABLE, ModTabs.TAB_EXENIGMATICLEGACY_ITEM);
 	public static final RegistryObject<Item> MANA_BOX_ITEM = REGISTRY.register("mana_box", BlockItemManaBox::new);
 
 
@@ -282,6 +290,7 @@ public class ModItems {
 	public static final RegistryObject<Item> MANA_FLOWER = REGISTRY.register("mana_flower", ManaFlower::new);
 	public static final RegistryObject<Item> INFINITY_ROD = REGISTRY.register("infinity_rod", InfinityRod::new);
 	public static final RegistryObject<Item> SLIME_CANNON = REGISTRY.register("slime_cannon", SlimeCannon::new);
+	public static final RegistryObject<Item> SLING = REGISTRY.register("sling", Sling::new);
 	public static final RegistryObject<Item> CONTINUUM_BOMB = REGISTRY.register("continuum_bomb", () -> new ContinuumBombItem(new Properties().rarity(Rarity.EPIC).tab(ModTabs.TAB_EXENIGMATICLEGACY_ITEM)));
 
 	//奇点

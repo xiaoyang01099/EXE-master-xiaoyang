@@ -55,6 +55,7 @@ public class ModEntityRenderers {
 		event.registerEntityRenderer(ModEntities.VAMPIRE_BAT.get(), BatRenderer::new);
 		event.registerEntityRenderer(ModEntities.VAMPIRE_WOLF.get(), WolfRenderer::new);
 		event.registerEntityRenderer(ModEntities.SLIME_CANNON_BALL.get(), RendererSlimeCannonBall::new);
+		event.registerEntityRenderer(ModEntities.SLING_BULLET.get(), RenderSlingBullet::new);
 //		event.registerEntityRenderer(ModEntities.RAINBOW_WITHER_SKULL.get(), RainbowWitherSkullRenderer::new);
 	}
 

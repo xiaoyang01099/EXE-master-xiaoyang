@@ -27,6 +27,7 @@
   "entity.ex_enigmaticlegacy.spectrite_wither": "Spectrite Wither",
   "entity.ex_enigmaticlegacy.spotted_garden_eel_bucket": "Spotted Garden Eel",
 
+  "block.ex_enigmaticlegacy.peaceful_table": "Silent Peace Table",
   "block.ex_enigmaticlegacy.advanced_spreader": "Natural Mana Spreader",
   "block.ex_enigmaticlegacy.cursed_mana_pool": "Cursed Mana Pool",
   "block.ex_enigmaticlegacy.cursed_spreader": "Cursed Spreader",
@@ -437,6 +438,7 @@
   "item.ex_enigmaticlegacy.nature_gift": "Nature Gift",
   "item.ex_enigmaticlegacy.cursed_pastels": "Cursed Pastels",
   "item.ex_enigmaticlegacy.mana_pastels": "Mana Pastels",
+  "item.ex_enigmaticlegacy.sling": "Sling",
 
   "itemGroup.ex_enigmaticlegacy": "§1EXENIGMATICLEGACY_ITEM",
   "itemGroup.ex_enigmaticlegacy_block": "§5EXENIGMATICLEGACY_BLOCK",

@@ -37,6 +37,8 @@ public class ConfigHandler {
     public static int spreaderMaxMana = 128000;
     public static int spreaderBurstMana = 32000;
 
+    public static boolean peacefulTableInAllDifficulties = false;
+
     public static List<Object> lockEntityListToHorn = new ArrayList<>();
 
     private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
@@ -93,6 +95,8 @@ public class ConfigHandler {
     public static ForgeConfigSpec.IntValue spreaderMaxManaConfig;
     public static ForgeConfigSpec.IntValue spreaderBurstManaConfig;
 
+    public static ForgeConfigSpec.BooleanValue peacefulTableInAllDifficultiesConfig;
+
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> lockEntityListToHornConfig;
 
     static {
@@ -128,6 +132,16 @@ public class ConfigHandler {
         CLIENT_SPEC = CLIENT_BUILDER.build();
 
         COMMON_BUILDER.comment("Common Settings").push("common");
+
+        COMMON_BUILDER.comment("Peaceful Table Settings").push("peaceful_table");
+        peacefulTableInAllDifficultiesConfig = COMMON_BUILDER
+                .comment(
+                        "Allow Peaceful Table to work in all difficulties",
+                        "Default: false (only works in Peaceful difficulty)",
+                        "Set to true to enable in all difficulties"
+                )
+                .define("peacefulTableInAllDifficulties", false);
+        COMMON_BUILDER.pop();
 
         COMMON_BUILDER.comment("Timeless Ivy settings").push("timeless_ivy");
         MANA_COST_PER_DAMAGE = COMMON_BUILDER
@@ -332,9 +346,13 @@ public class ConfigHandler {
         spreaderMaxMana = spreaderMaxManaConfig.get();
         spreaderBurstMana = spreaderBurstManaConfig.get();
 
+        peacefulTableInAllDifficulties = peacefulTableInAllDifficultiesConfig.get();
+
         ExEnigmaticlegacyMod.LOGGER.info("Horn of Plenty entity blacklist loaded: {}", lockEntityListToHorn);
         ExEnigmaticlegacyMod.LOGGER.info("Advanced Botany Spreader config loaded: MaxMana={}, BurstMana={}",
                 spreaderMaxMana, spreaderBurstMana);
+        ExEnigmaticlegacyMod.LOGGER.info("Peaceful Table config loaded: AllDifficulties={}",
+                peacefulTableInAllDifficulties);
     }
 
     public static void syncClientConfig() {
@@ -455,13 +473,18 @@ public class ConfigHandler {
     }
 
     public static class ABSpreaderConfig {
-
         public static int getSpreaderMaxMana() {
-         return spreaderMaxMana;
+            return spreaderMaxMana;
         }
 
         public static int getSpreaderBurstMana() {
             return spreaderBurstMana;
+        }
+    }
+
+    public static class PeacefulTableConfig {
+        public static boolean isEnabledInAllDifficulties() {
+            return peacefulTableInAllDifficulties;
         }
     }
 }

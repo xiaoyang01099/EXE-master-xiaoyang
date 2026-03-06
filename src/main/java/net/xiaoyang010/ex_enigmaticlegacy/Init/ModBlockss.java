@@ -137,7 +137,7 @@ public class ModBlockss {
 	public static final RegistryObject<Block> DRAGON_CRYSTALS_BLOCK = REGISTRY.register("dragon_crystal_block", DragonCrystalBlock::new);
 	public static final RegistryObject<Block> DECON_TABLE = REGISTRY.register("deconstruction_table", DeconTableBlock::new);
 	public static final RegistryObject<Block> ANTIGRAVITATION_BLOCK = REGISTRY.register("antigravitation_block", BlockAntigravitation::new);
-
+	public static final RegistryObject<Block> PEACEFUL_TABLE = REGISTRY.register("peaceful_table", () -> new BlockPeacefulTable(BlockBehaviour.Properties.of(Material.WOOD).strength(1.0F, 10.0F).sound(SoundType.WOOD).randomTicks().noOcclusion()));
 
 
 

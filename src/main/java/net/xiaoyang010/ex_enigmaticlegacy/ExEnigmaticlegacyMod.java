@@ -99,17 +99,17 @@ public class ExEnigmaticlegacyMod {
 		ModIntegrationFlowers.BLOCK_ENTITY_REGISTRY.register(bus);
 		ModIntegrationFlowers.BLOCK_ITEM_REGISTRY.register(bus);
 
-		if (ModList.get().isLoaded("projecte")) {
-			MinecraftForge.EVENT_BUS.register(NoEMCEventHandler.class);
-			MinecraftForge.EVENT_BUS.register(NoEMCCommandInterceptor.class);
-		}
-
 		MinecraftForge.EVENT_BUS.register(new CurseAbilityHandler());
 		MinecraftForge.EVENT_BUS.register(new RelicsEventHandler());
 		MinecraftForge.EVENT_BUS.register(new TooltipEvent());
 		MinecraftForge.EVENT_BUS.register(new SpectatorModeHandler());
 		MinecraftForge.EVENT_BUS.register(EventHandler.class);
 		MinecraftForge.EVENT_BUS.register(new CrissaegrimEventHandler());
+
+		if (ModList.get().isLoaded("projecte")) {
+			MinecraftForge.EVENT_BUS.register(NoEMCEventHandler.class);
+			MinecraftForge.EVENT_BUS.register(NoEMCCommandInterceptor.class);
+		}
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			MinecraftForge.EVENT_BUS.register(new EffectManager());

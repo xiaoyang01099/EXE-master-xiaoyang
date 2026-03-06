@@ -14,6 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Block.tile.AlphirinePortal;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Block.tile.EntityAdvancedSpark;
+import net.xiaoyang010.ex_enigmaticlegacy.Entity.others.EntitySlingBullet;
 import net.xiaoyang010.ex_enigmaticlegacy.Entity.others.BlackHoleEntity;
 import net.xiaoyang010.ex_enigmaticlegacy.Entity.biological.*;
 import net.xiaoyang010.ex_enigmaticlegacy.Entity.others.*;
@@ -46,6 +47,16 @@ public class ModEntities {
 //							.fireImmune()
 //							.build("doppleganger_vi")
 //			);
+
+	public static final RegistryObject<EntityType<EntitySlingBullet>> SLING_BULLET =
+			REGISTRY.register("sling_bullet", () ->
+					EntityType.Builder.<EntitySlingBullet>of(
+							EntitySlingBullet::new, MobCategory.MISC)
+							.sized(0.25F, 0.25F)
+							.clientTrackingRange(250)
+							.updateInterval(1)
+							.build("sling_bullet")
+			);
 
 	public static final RegistryObject<EntityType<EntitySlimeCannonBall>> SLIME_CANNON_BALL =
 			REGISTRY.register("slime_cannon_ball", () ->

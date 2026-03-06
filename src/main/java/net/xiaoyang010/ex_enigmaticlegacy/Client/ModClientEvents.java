@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -142,6 +143,26 @@ public class ModClientEvents {
                     new ResourceLocation("ex_enigmaticlegacy", "has_target"),
                     (stack, world, entity, seed) ->
                             SphereNavigation.getFindBlock(stack) != null ? 1.0F : 0.0F
+            );
+            ItemProperties.register(
+                    ModItems.SLING.get(),
+                    new ResourceLocation(ExEnigmaticlegacyMod.MODID, "throw"),
+                    (stack, level, entity, seed) -> {
+                        if (entity == null) return 0.0F;
+                        if (entity.isUsingItem() && entity.getUseItem() == stack) {
+                            return 1.0F;
+                        }
+                        boolean isSwingMain = entity.getItemInHand(InteractionHand.MAIN_HAND) == stack
+                                && entity.swingTime > 0
+                                && entity.getUsedItemHand() == InteractionHand.MAIN_HAND;
+                        boolean isSwingOff = entity.getItemInHand(InteractionHand.OFF_HAND) == stack
+                                && entity.swingTime > 0
+                                && entity.getUsedItemHand() == InteractionHand.OFF_HAND;
+                        if (isSwingMain || isSwingOff) {
+                            return 2.0F;
+                        }
+                        return 0.0F;
+                    }
             );
         });
     }

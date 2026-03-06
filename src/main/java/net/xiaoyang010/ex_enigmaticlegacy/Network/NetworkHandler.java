@@ -36,6 +36,24 @@ public class NetworkHandler {
     public static void register() {
         CHANNEL.registerMessage(
                 packetId++,
+                MessagePlayerAction.class,
+                MessagePlayerAction::encode,
+                MessagePlayerAction::decode,
+                MessagePlayerAction::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
+        );
+
+        CHANNEL.registerMessage(
+                packetId++,
+                MessageParticleEntity.class,
+                MessageParticleEntity::encode,
+                MessageParticleEntity::decode,
+                MessageParticleEntity::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
+        );
+
+        CHANNEL.registerMessage(
+                packetId++,
                 CorruptionSyncPacket.class,
                 CorruptionSyncPacket::encode,
                 CorruptionSyncPacket::decode,
