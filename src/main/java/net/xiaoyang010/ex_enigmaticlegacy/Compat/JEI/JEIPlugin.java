@@ -3,18 +3,13 @@ package net.xiaoyang010.ex_enigmaticlegacy.Compat.JEI;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
 import mezz.jei.api.registration.*;
 import morph.avaritia.api.ExtremeCraftingRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -23,14 +18,12 @@ import net.xiaoyang010.ex_enigmaticlegacy.Client.gui.RainbowTableScreen;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.JEI.AvaritiaJei.AvaTransferHandler;
 import net.xiaoyang010.ex_enigmaticlegacy.Container.CelestialHTMenu;
 import net.xiaoyang010.ex_enigmaticlegacy.Container.RainbowTableContainer;
-import net.xiaoyang010.ex_enigmaticlegacy.Container.StarlitSanctumMenu;
 import net.xiaoyang010.ex_enigmaticlegacy.ExEnigmaticlegacyMod;
 import net.xiaoyang010.ex_enigmaticlegacy.Init.ModBlockss;
 import net.xiaoyang010.ex_enigmaticlegacy.Init.ModRecipes;
 import net.xiaoyang010.ex_enigmaticlegacy.Recipe.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,7 +64,6 @@ public class JEIPlugin implements IModPlugin {
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(CelestialHTMenu.class, CelestialTransmuteRecipe.TYPE_ID, 1, 4, 5, 36);
         registration.addRecipeTransferHandler(RainbowTableContainer.class, RainbowTableRecipe.TYPE_ID, 0, 4, 5, 36);
-     //   registration.addRecipeTransferHandler(StarlitSanctumMenu.class, StarlitSanctumCategory.UID, 0, 488, 489, 36);
         registration.addUniversalRecipeTransferHandler(new AvaTransferHandler());
         registration.addRecipeTransferHandler(new StarlitSanctumTransferHandler(registration.getTransferHelper()), StarlitSanctumCategory.UID);
     }
@@ -79,10 +71,8 @@ public class JEIPlugin implements IModPlugin {
     //用合成方块查找配方
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModBlockss.CELESTIAL_HOLINESS_TRANSMUTER.get()),
-                CelestialTransmuteRecipe.TYPE_ID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlockss.RAINBOW_TABLE.get()),
-                RainbowTableRecipe.TYPE_ID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlockss.CELESTIAL_HOLINESS_TRANSMUTER.get()), CelestialTransmuteRecipe.TYPE_ID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlockss.RAINBOW_TABLE.get()), RainbowTableRecipe.TYPE_ID);
         registration.addRecipeCatalyst(new ItemStack(ModBlockss.POLYCHROME_COLLAPSE_PRISM.get()), PolychromeRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(ModBlockss.NIDAVELLIR_FORGE.get()), NidavellirCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(ModBlockss.EXTREME_AUTO_CRAFTER.get()), EXTREME_CRAFTING_TYPE);

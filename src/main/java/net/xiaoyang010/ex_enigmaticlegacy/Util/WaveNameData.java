@@ -15,7 +15,15 @@ public class WaveNameData implements TooltipComponent {
         this.rawText = rawText;
     }
 
-    public ItemStack getStack()   { return stack;   }
-    public IWaveName.WaveStyle getStyle()   { return style;   }
-    public String getRawText() { return rawText; }
+    public ItemStack getStack()   {
+        return stack;
+    }
+
+    public IWaveName.WaveStyle getStyle()   {
+        return style;
+    }
+
+    public String getRawText() {
+        return rawText;
+    }
 }

@@ -292,6 +292,9 @@ public class ModItems {
 	public static final RegistryObject<Item> SLIME_CANNON = REGISTRY.register("slime_cannon", SlimeCannon::new);
 	public static final RegistryObject<Item> SLING = REGISTRY.register("sling", Sling::new);
 	public static final RegistryObject<Item> CONTINUUM_BOMB = REGISTRY.register("continuum_bomb", () -> new ContinuumBombItem(new Properties().rarity(Rarity.EPIC).tab(ModTabs.TAB_EXENIGMATICLEGACY_ITEM)));
+	public static final RegistryObject<Item> SLIME_NECKLACE = REGISTRY.register("slime_necklace", SlimeNecklace::new);
+
+
 
 	//奇点
 	public static final RegistryObject<Item> ETERNAL_SINGULARITY = REGISTRY.register("eternal_singularity", ModSingularity::new);

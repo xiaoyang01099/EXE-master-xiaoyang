@@ -141,10 +141,6 @@ public class ExEnigmaticlegacyMod {
 				"blood_bar",
 				BloodBarHud.INSTANCE
 		);
-		MinecraftForgeClient.registerTooltipComponentFactory(
-				WaveNameData.class,
-				WaveNameTooltipComponent::new
-		);
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
@@ -175,6 +171,11 @@ public class ExEnigmaticlegacyMod {
 			ItemBlockRenderTypes.setRenderLayer(ModBlockss.INFINITYGlASS.get(), RenderType.translucent());
 			ItemBlockRenderTypes.setRenderLayer(ModBlockss.PAGED_CHEST.get(), RenderType.cutoutMipped());
 		});
+
+		MinecraftForgeClient.registerTooltipComponentFactory(
+				WaveNameData.class,
+				WaveNameTooltipComponent::new
+		);
 	}
 
 	public void Continuum() {

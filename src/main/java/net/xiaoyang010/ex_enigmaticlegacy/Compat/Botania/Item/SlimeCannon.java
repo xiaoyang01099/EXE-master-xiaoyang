@@ -27,6 +27,7 @@ import net.xiaoyang010.ex_enigmaticlegacy.Entity.others.EntitySlimeCannonBall;
 import net.xiaoyang010.ex_enigmaticlegacy.Init.ModTabs;
 import net.xiaoyang010.ex_enigmaticlegacy.Util.StyleMarker;
 import net.xiaoyang010.ex_enigmaticlegacy.api.IWaveName;
+import top.theillusivec4.curios.api.CuriosApi;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.IManaItem;
 import vazkii.botania.client.fx.WispParticleData;
@@ -119,7 +120,6 @@ public class SlimeCannon extends Item implements IWaveName {
             tag.putInt(TAG_ABSORB_TIMER, timer - 1);
             return;
         }
-
         var hit = ProjectileUtil.getEntityHitResult(
                 level, player,
                 player.getEyePosition(),
@@ -127,10 +127,13 @@ public class SlimeCannon extends Item implements IWaveName {
                 player.getBoundingBox().inflate(8.0),
                 e -> e instanceof Slime s && s.isAlive() && !s.isInvisible()
         );
-
         if (hit != null && hit.getEntity() instanceof Slime slime) {
             tryAbsorbSlime(stack, slime, player, level);
-            tag.putInt(TAG_ABSORB_TIMER, ABSORB_COOLDOWN_TICKS);
+            int cooldown = ABSORB_COOLDOWN_TICKS;
+            if (hasSlimeNecklace(player)) {
+                cooldown = (int) (cooldown * SlimeNecklace.ABSORB_COOLDOWN_MULTIPLIER);
+            }
+            tag.putInt(TAG_ABSORB_TIMER, cooldown);
         } else {
             player.displayClientMessage(
                     new TranslatableComponent("message.slime_cannon.absorbing")
@@ -142,6 +145,10 @@ public class SlimeCannon extends Item implements IWaveName {
     private void tryAbsorbSlime(ItemStack stack, Slime slime, Player player, Level level) {
         int slimeSize = slime.getSize();
         int manaRequired = MANA_PER_ABSORB * slimeSize;
+
+        if (hasSlimeNecklace(player)) {
+            manaRequired = (int) (manaRequired * SlimeNecklace.ABSORB_MANA_DISCOUNT);
+        }
 
         if (getMana(stack) < manaRequired) {
             player.displayClientMessage(
@@ -272,6 +279,12 @@ public class SlimeCannon extends Item implements IWaveName {
     private static void addMana(ItemStack stack, int amount) {
         stack.getCapability(BotaniaForgeCapabilities.MANA_ITEM)
                 .ifPresent(m -> m.addMana(amount));
+    }
+
+    private static boolean hasSlimeNecklace(Player player) {
+        return CuriosApi.getCuriosHelper()
+                .findFirstCurio(player, stack -> stack.getItem() instanceof SlimeNecklace)
+                .isPresent();
     }
 
     @Override

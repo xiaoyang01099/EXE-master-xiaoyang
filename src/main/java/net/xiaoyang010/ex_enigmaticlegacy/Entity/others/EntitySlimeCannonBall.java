@@ -20,6 +20,8 @@ import net.minecraft.world.phys.Vec3;
 import net.xiaoyang010.ex_enigmaticlegacy.Init.ModEntities;
 import vazkii.botania.client.fx.WispParticleData;
 
+import javax.annotation.Nullable;
+
 public class EntitySlimeCannonBall extends Projectile {
     private static final EntityDataAccessor<Integer> SLIME_SIZE = SynchedEntityData.defineId(EntitySlimeCannonBall.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DAMAGE = SynchedEntityData.defineId(EntitySlimeCannonBall.class, EntityDataSerializers.FLOAT);
@@ -69,6 +71,45 @@ public class EntitySlimeCannonBall extends Projectile {
         return 10.0F + (getSlimeSize() - 1) * 5.0F;
     }
 
+    public static class SlimeCannonDamageSource extends DamageSource {
+        @Nullable
+        private final Entity owner;
+        @Nullable
+        private final Entity directCause;
+
+        public SlimeCannonDamageSource(@Nullable Entity projectile, @Nullable Entity owner) {
+            super("slime_cannon");
+            this.directCause = projectile;
+            this.owner = owner;
+        }
+
+        @Nullable
+        @Override
+        public Entity getDirectEntity() {
+            return this.directCause;
+        }
+
+        @Nullable
+        @Override
+        public Entity getEntity() {
+            return this.owner;
+        }
+
+        @Override
+        public boolean isProjectile() {
+            return false;
+        }
+
+        @Override
+        public boolean isMagic() {
+            return false;
+        }
+    }
+
+    private DamageSource createUndodgeableDamage() {
+        return new SlimeCannonDamageSource(this, getOwner());
+    }
+
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         int size = cachedSize > 0 ? cachedSize : 1;
@@ -101,7 +142,7 @@ public class EntitySlimeCannonBall extends Projectile {
         ).forEach(living -> {
             int oldInvTime = living.invulnerableTime;
             living.invulnerableTime = 0;
-            living.hurt(DamageSource.thrown(this, getOwner()), getContactDamagePerTick());
+            living.hurt(createUndodgeableDamage(), getContactDamagePerTick());
             living.invulnerableTime = oldInvTime;
         });
 
@@ -144,7 +185,7 @@ public class EntitySlimeCannonBall extends Projectile {
         if (target instanceof LivingEntity living && target != getOwner()) {
             int oldInvTime = living.invulnerableTime;
             living.invulnerableTime = 0;
-            living.hurt(DamageSource.thrown(this, getOwner()), getDamage());
+            living.hurt(createUndodgeableDamage(), getDamage());
             living.invulnerableTime = oldInvTime;
 
             doAoeDamage();
@@ -189,7 +230,7 @@ public class EntitySlimeCannonBall extends Projectile {
         ).forEach(living -> {
             int oldInvTime = living.invulnerableTime;
             living.invulnerableTime = 0;
-            living.hurt(DamageSource.thrown(this, getOwner()), damage);
+            living.hurt(createUndodgeableDamage(), damage);
             living.invulnerableTime = oldInvTime;
         });
     }

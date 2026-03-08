@@ -66,6 +66,7 @@ import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Flower.FlowerTile.Gener
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.AntigravityCharm;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.IvyRegen;
 import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.ManaBucket;
+import net.xiaoyang010.ex_enigmaticlegacy.Compat.Botania.Item.SlimeNecklace;
 import net.xiaoyang010.ex_enigmaticlegacy.Config.ConfigHandler;
 import net.xiaoyang010.ex_enigmaticlegacy.Container.CelestialHTMenu;
 import net.xiaoyang010.ex_enigmaticlegacy.Effect.Drowning;
@@ -106,6 +107,34 @@ public class ModEventHandler {
     private static int invulnerableTimer = 0;
     private static final int INVULNERABLE_DURATION = 30;
     private static final int REPAIR_COST = 1500;
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void SlimeNecklaceHurt(LivingHurtEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.level.isClientSide) return;
+        if (SlimeNecklace.tryReflectProjectile(player, event.getSource(), event.getAmount())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void SlimeNecklaceAttack(LivingAttackEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.level.isClientSide) return;
+        if (SlimeNecklace.shouldBlockSlimeDamage(player, event.getSource())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void SlimeNecklaceDamage(LivingDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.level.isClientSide) return;
+        SlimeNecklace.tryTimeFreeze(player, event.getSource(), event.getAmount());
+        if (SlimeNecklace.trySlimeShield(player, event.getSource(), event.getAmount())) {
+            event.setCanceled(true);
+        }
+    }
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
